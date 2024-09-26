@@ -31,20 +31,20 @@ Permet d'être lancé sans compilation et de relancer dynamiquement l'applicatio
 
 ## Exercice
 
-1) Identifier et corriger l'erreur de la route POST authors
-2) Renvoyer une erreur personnalisée avec un code 404 si l'auteur n'est pas trouvée lors des routes PATCH et GET/{id}
+1) Identifier et corriger l'erreur de la route POST authors     -done-
+2) Renvoyer une erreur personnalisée avec un code 404 si l'auteur n'est pas trouvée lors des routes PATCH et GET/{id}   -done-
 3) 
-    1) Développer la route GET /books
-    2) Développer la route GET /books/{id}
-    3) Développer la route POST /books
-    4) Développer la route PATCH /books/{id}
+    1) Développer la route GET /books                       -done-
+    2) Développer la route GET /books/{id}                  -done-
+    3) Développer la route POST /books                      -done-
+    4) Développer la route PATCH /books/{id}                -done-
 4) 
-    1) Développer le modèle BookCollection
-    2) Développer le DTO BookCollection
-    3) Développer la route GET /books-collection
-    4) Développer la route GET /books-collection/{id}
-    5) Développer la route POST /books-collection
-    6) Développer la route PATCH /books-collection/{id}
+    1) Développer le modèle BookCollection                  -done-
+    2) Développer le DTO BookCollection                     -done-
+    3) Développer la route GET /books-collection            -done-
+    4) Développer la route GET /books-collection/{id}       -done-
+    5) Développer la route POST /books-collection           -done-
+    6) Développer la route PATCH /books-collection/{id}     -done-
 5) 
     1) Mettre à jour la route DELETE /authors/{id} afin d'empêcher la suppression si un exemplaire d'un de ses livres est présent dans la bibliothèques
     2) Développer la route DELETE /books/{id} en empêchant la suppression du livre si un exemplaire est présent dans la bibliothèque
