@@ -1,4 +1,7 @@
 import { Author } from "../models/author.model";
+import { Book } from "../models/book.model";
+import { BookCollection } from "../models/bookCollection.model";
+import { ForbiddenError, NotFoundError } from "../utils/errors";
 
 export class AuthorService {
   // Récupère tous les auteurs
@@ -22,9 +25,18 @@ export class AuthorService {
   // Supprime un auteur par ID
   public async deleteAuthor(id: number): Promise<void> {
     const author = await Author.findByPk(id);
-    if (author) {
-      await author.destroy();
+
+    if (!author) {
+      throw new NotFoundError("Auteur introuvable.");
     }
+
+    const hasBooks = await Book.findOne({ where: { author_id: id } });
+  
+    if (hasBooks) {
+      throw new ForbiddenError("L'auteur ne peut pas être supprimé, car il possède encore des livres dans la bibliothèque.");
+    }
+  
+    await author.destroy();
   }
 
   // Met à jour un auteur
@@ -41,6 +53,17 @@ export class AuthorService {
       return author;
     }
     return null;
+  }
+
+  public async getBooksByAuthor(authorId: number): Promise<Book[]> {
+    const author = await Author.findByPk(authorId);
+
+    if (!author) {
+      throw new Error("Auteur introuvable.");
+    }
+
+    // Récupérer les livres liés à cet auteur
+    return Book.findAll({ where: { author_id: authorId } });
   }
 }
 

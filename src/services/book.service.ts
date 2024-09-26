@@ -1,6 +1,7 @@
 import { Author } from "../models/author.model";
 import { Book } from "../models/book.model";
-import { NotFoundError } from "../utils/errors";
+import { BookCollection } from "../models/bookCollection.model";
+import { ForbiddenError, NotFoundError } from "../utils/errors";
 
 export class BookService {
   public async getAllBooks(): Promise<Book[]> {
@@ -48,6 +49,30 @@ export class BookService {
 
     await book.save();
     return book;
+  }
+
+  public async deleteBook(id: number): Promise<void> {
+    const book = await Book.findByPk(id);
+    if (!book) {
+      throw new NotFoundError("Livre introuvable.");
+    }
+
+    const bookCollection = await BookCollection.findOne({ where: { book_id: id } });
+    if (bookCollection) {
+      throw new ForbiddenError("Le livre ne peut pas être supprimé, car un exemplaire est dans la bibliothèque.");
+    }
+
+    await book.destroy();
+  }
+
+  public async getBookCollectionsByBook(bookId: number): Promise<BookCollection[]> {
+    const book = await Book.findByPk(bookId);
+
+    if (!book) {
+      throw new Error("Livre introuvable.");
+    }
+
+    return BookCollection.findAll({ where: { book_id: bookId } });
   }
 }
 

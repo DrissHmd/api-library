@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Patch, Post, Route, Tags } from "tsoa";
+import { Body, Controller, Delete, Get, Patch, Path, Post, Route, Tags } from "tsoa";
 import { BookDTO } from "../dto/book.dto";
 import { bookService } from "../services/book.service";
+import { BookCollectionDTO } from "../dto/bookCollection.dto";
 
 @Route("books")
 @Tags("Books")
@@ -30,5 +31,15 @@ export class BookController extends Controller {
     const authorId = author ? author.id : undefined;
 
     return bookService.updateBook(id, title, publish_year, authorId, isbn);
+  }
+
+  @Delete("{id}")
+  public async deleteBook(@Path() id: number): Promise<void> {
+      await bookService.deleteBook(id);
+  }
+
+  @Get("{id}/books-collections")
+  public async getBookCollectionsByBook(@Path() id: number): Promise<BookCollectionDTO[]> {
+    return bookService.getBookCollectionsByBook(id);
   }
 }

@@ -37,6 +37,15 @@ export class BookCollectionService {
         await bookCollection.save();
         return bookCollection;
     }
+
+    public async deleteBookCollection(id: number): Promise<void> {
+        const bookCollection = await BookCollection.findByPk(id);
+        if (!bookCollection) {
+          throw new NotFoundError("La collection n'existe pas.");
+        }
+    
+        await bookCollection.destroy();
+      }
 }
 
 export const bookCollectionService = new BookCollectionService();
