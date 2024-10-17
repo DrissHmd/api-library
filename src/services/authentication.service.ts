@@ -25,7 +25,52 @@ export class AuthenticationService {
     // Vérifie si le mot de passe est correct
     if (password === decodedPassword) {
       // Si l'utilisateur est authentifié, on génère un JWT
-      const token = jwt.sign({ username: user.username }, JWT_SECRET, {
+      let permissions: string[] = [];
+
+      if (username === "admin") {
+        // L'administrateur a tous les droits
+        permissions = [
+          "author:get",
+          "author:post",
+          "author:update",
+          "author:delete",
+          "book:get",
+          "book:post",
+          "book:update",
+          "book:delete",
+          "bookCollection:get",
+          "bookCollection:post",
+          "bookCollection:update",
+          "bookCollection:delete",
+        ];
+      } else if (username === "gerant") {
+        // Le gérant peut lire tout, créer et modifier sur toutes les tables,
+        // supprimer uniquement sur la table d'exemplaire des livres "Book Collection"
+        permissions = [
+          "author:get",
+          "book:get",
+          "bookCollection:get",
+          "author:post",
+          "book:post",
+          "bookCollection:post",
+          "author:update",
+          "book:update",
+          "bookCollection:update",
+          "bookCollection:delete", // Suppression uniquement sur bookCollection
+        ];
+      } else if (username === "utilisateur") {
+        // L'utilisateur peut tout lire et créer un nouveau livre si l'auteur existe
+        permissions = [
+          "author:get",
+          "book:get",
+          "bookCollection:get",
+          "book:post",
+        ];
+      } else {
+        throw new Error("Invalid user");
+      }
+
+      const token = jwt.sign({ username: user.username, permissions }, JWT_SECRET, {
         expiresIn: "1h",
       });
       return token;
